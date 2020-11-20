@@ -1,0 +1,78 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: da3846253a6d4d9258b85701a991d6e3677bceaf2a7b266a135b4562f6fd3e3f
+
+name:           cubiml
+version:        0.1.0.0
+description:    Please see the README on Github at <https://github.com/ewilden/cubiml#readme>
+homepage:       https://github.com/ewilden/cubiml#readme
+bug-reports:    https://github.com/ewilden/cubiml/issues
+author:         Evan Wildenhain
+maintainer:     evan.wildenhain@gmail.com
+copyright:      2020 Evan Wildenhain
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/ewilden/cubiml
+
+library
+  exposed-modules:
+      CubiML.Ast
+      CubiML.Parser
+      Import
+      Run
+      Types
+      Util
+  other-modules:
+      Paths_cubiml
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.11 && <10
+    , megaparsec >=9.0.0
+    , rio >=0.1.12.0
+  default-language: Haskell2010
+
+executable cubiml-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_cubiml
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.11 && <10
+    , cubiml
+    , megaparsec >=9.0.0
+    , optparse-simple
+    , raw-strings-qq
+    , rio >=0.1.12.0
+  default-language: Haskell2010
+
+test-suite cubiml-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      UtilSpec
+      Paths_cubiml
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.11 && <10
+    , cubiml
+    , hspec
+    , megaparsec >=9.0.0
+    , rio >=0.1.12.0
+  default-language: Haskell2010
