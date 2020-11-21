@@ -56,3 +56,5 @@ class (Monad m) => TypecheckerCore m where
    (AKA for each pair of assignment from the variable (v), and assignment to the variable (u), 
    we add a flows constraint.)
 -}
+  runCore :: m a -> Either TypeError a
+
