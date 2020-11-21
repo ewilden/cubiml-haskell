@@ -26,7 +26,7 @@ class (Monad m) => TypecheckerCore m where
   -- pub fn func(&mut self, arg: Use, ret: Value) -> Value;
   func :: Use -> Value -> m Value
   -- pub fn func_use(&mut self, arg: Value, ret: Use) -> Use;
-  func_use :: Value -> Use -> m Value
+  func_use :: Value -> Use -> m Use
 
   -- pub fn obj(&mut self, fields: Vec<(String, Value)>) -> Value;
   obj :: [(Text, Value)] -> m Value

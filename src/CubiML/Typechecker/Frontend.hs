@@ -115,5 +115,31 @@ checkExpr (ExprMatch matchExpr cases) = do
   bound <- liftCore $ Core.case_use caseTypePairs
   flow matchType bound
   return resultType
+checkExpr (ExprFuncDef argName bodyExpr) = do
+  (argType, argBound) <- liftCore Core.var
+  bodyType <- inChildBindingScope $ do
+    insertBinding argName argType
+    checkExpr bodyExpr
+  liftCore $ Core.func argBound bodyType
+checkExpr (ExprCall funcExpr argExpr) = do
+  funcType <- checkExpr funcExpr
+  argType <- checkExpr argExpr
+  (retType, retBound) <- liftCore Core.var
+  bound <- liftCore $ Core.func_use argType retBound
+  flow funcType bound
+  return retType
+checkExpr (ExprLet (name, varExpr) restExpr) = do
+  varType <- checkExpr varExpr
+  inChildBindingScope $ do
+    insertBinding name varType
+    checkExpr restExpr
+checkExpr (ExprLetRec defs restExpr) = inChildBindingScope $ do
+  tempBounds <- forM (map fst defs) $ \name -> do
+    (tempType, tempBound) <- liftCore Core.var
+    insertBinding name tempType
+    return tempBound
+  forM_ (zip defs tempBounds) $ \((_, expr), bound) -> do
+    varType <- checkExpr expr
+    flow varType bound
+  checkExpr restExpr
 
-checkExpr _ = undefined
