@@ -143,3 +143,16 @@ checkExpr (ExprLetRec defs restExpr) = inChildBindingScope $ do
     flow varType bound
   checkExpr restExpr
 
+checkToplevel :: TopLevel -> Frontend m ()
+checkToplevel (TLExpr expr) = void $ checkExpr expr
+checkToplevel (TLLetDef (name, varExpr)) = do
+  varType <- checkExpr varExpr
+  insertBinding name varType
+checkToplevel (TLLetRecDef defs) = do
+  tempBounds <- forM defs $ \(name, _) -> do
+    (tempType, tempBound) <- liftCore Core.var
+    insertBinding name tempType
+    return tempBound
+  forM_ (zip defs tempBounds) $ \((_, expr), bound) -> do
+    varType <- checkExpr expr
+    flow varType bound
