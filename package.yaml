@@ -21,7 +21,9 @@ description:         Please see the README on Github at <https://github.com/ewil
 
 dependencies:
 - base >= 4.11 && < 10
+- mtl
 - megaparsec
+- microlens-platform
 - parser-combinators
 - raw-strings-qq
 - rio >= 0.1.12.0
