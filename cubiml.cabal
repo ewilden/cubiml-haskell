@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8f61a431a515bb4e5739d9d7429241b020f1938233de3e912da1fd00d884f974
+-- hash: 2347c163d47689a816effb8c999bbcd7417e32ba194871e406957c8eddb85fef
 
 name:           cubiml
 version:        0.1.0.0
@@ -31,7 +31,9 @@ library
       CubiML.Parser
       CubiML.Typechecker
       CubiML.Typechecker.Core
+      CubiML.Typechecker.Core.Impl
       CubiML.Typechecker.Frontend
+      CubiML.Typechecker.Reachability
       Import
       Run
       Types
