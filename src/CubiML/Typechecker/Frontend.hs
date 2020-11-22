@@ -43,7 +43,9 @@ putBinding b t v = over bindingsMap (HashMap.insert t v) b
 -- That is, should I have Either err (State s a), or State s (Either err a)?
 -- I don't think I want any binding changes to stick after an error...
 
-class (Core.TypecheckerCore m, MonadError Core.TypeError m, MonadState Bindings m) 
+class (Core.TypecheckerCore m, 
+       MonadError Core.TypeError m, 
+       MonadState Bindings m) 
     => Frontend m where
   lookupBinding :: Text -> m (Maybe Core.Value)
   lookupBinding name = gets (`getBinding` name)
@@ -59,9 +61,7 @@ class (Core.TypecheckerCore m, MonadError Core.TypeError m, MonadState Bindings 
     return result
 
   flow :: Core.Value -> Core.Use -> m ()
-  flow val use = do
-    eith <- Core.flow val use
-    either throwError return eith
+  flow val use = Core.flow val use
 
   checkUnique :: (Hashable a, Eq a) => Core.TypeError -> [a] -> m ()
   checkUnique errMsg items =
