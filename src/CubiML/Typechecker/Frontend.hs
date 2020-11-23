@@ -20,42 +20,37 @@ import qualified CubiML.Typechecker.Core as Core
 
 newtype Bindings = Bindings 
   { _bindingsMap :: HashMap.HashMap Text Core.Value
-  }
-makeLenses ''Bindings
+  } deriving Show
+makeClassy ''Bindings
 
-newBindings :: Bindings
-newBindings = Bindings mempty
+initBindings :: Bindings
+initBindings = Bindings mempty
 
-getBinding :: Bindings -> Text -> Maybe Core.Value
-getBinding b t = HashMap.lookup t $ _bindingsMap b
+type Frontend s m = 
+  (Core.TypecheckerCore m, MonadError Core.TypeError m, MonadState s m, HasBindings s) 
 
-putBinding :: Bindings -> Text -> Core.Value -> Bindings
-putBinding b t v = over bindingsMap (HashMap.insert t v) b
+lookupBinding :: (Frontend s m) => Text -> m (Maybe Core.Value)
+lookupBinding name = use $ bindingsMap . at name
 
-type Frontend m = (Core.TypecheckerCore m, MonadError Core.TypeError m, MonadState Bindings m) 
+insertBinding :: (Frontend s m) => Text -> Core.Value -> m ()
+insertBinding name value = bindingsMap . at name .= Just value
 
-lookupBinding :: (Frontend m) => Text -> m (Maybe Core.Value)
-lookupBinding name = gets (`getBinding` name)
-
-insertBinding :: (Frontend m) => Text -> Core.Value -> m ()
-insertBinding name value = modify (\b -> putBinding b name value)
-
-inChildBindingScope :: (Frontend m) => m a -> m a
+inChildBindingScope :: (Frontend s m) => m a -> m a
 inChildBindingScope action = do
-  currBindings <- get
+  currBindings <- use bindings
   result <- action
-  put currBindings
+  bindings .= currBindings
   return result
 
-flow :: (Frontend m) => Core.Value -> Core.Use -> m ()
-flow val use = Core.flow val use
+flow :: (Frontend s m) => Core.Value -> Core.Use -> m ()
+flow = Core.flow
 
-checkUnique :: (Frontend m) => (Hashable a, Eq a) => Core.TypeError -> [a] -> m ()
+checkUnique :: (Frontend s m) => (Hashable a, Eq a) => Core.TypeError -> [a] -> m ()
 checkUnique errMsg items =
   when (length (HashSet.fromList items) /= length items) $
     throwError errMsg
 
-checkExpr :: (Frontend m) => Expr -> m Core.Value
+checkExpr :: (Frontend s m) => Expr -> m Core.Value
 checkExpr (ExprLiteral _) = Core.bool
 checkExpr (ExprVariable name) = do
   mayVal <- lookupBinding name
@@ -140,7 +135,7 @@ checkExpr (ExprLetRec defs restExpr) = inChildBindingScope $ do
     flow varType bound
   checkExpr restExpr
 
-checkToplevel :: (Frontend m) => TopLevel -> m ()
+checkToplevel :: (Frontend s m) => TopLevel -> m ()
 checkToplevel (TLExpr expr) = void $ checkExpr expr
 checkToplevel (TLLetDef (name, varExpr)) = do
   varType <- checkExpr varExpr

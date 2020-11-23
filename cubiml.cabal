@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2347c163d47689a816effb8c999bbcd7417e32ba194871e406957c8eddb85fef
+-- hash: 0291e4dbce0c4c32d272d0ce4f937fb8397d7cc37d68621d74d673f892af1d8e
 
 name:           cubiml
 version:        0.1.0.0
-description:    Please see the README on Github at <https://github.com/ewilden/cubiml#readme>
-homepage:       https://github.com/ewilden/cubiml#readme
-bug-reports:    https://github.com/ewilden/cubiml/issues
+description:    Please see the README on Github at <https://github.com/ewilden/cubiml-haskell#readme>
+homepage:       https://github.com/ewilden/cubiml-haskell#readme
+bug-reports:    https://github.com/ewilden/cubiml-haskell/issues
 author:         Evan Wildenhain
 maintainer:     evan.wildenhain@gmail.com
 copyright:      2020 Evan Wildenhain
@@ -23,11 +23,12 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/ewilden/cubiml
+  location: https://github.com/ewilden/cubiml-haskell
 
 library
   exposed-modules:
       CubiML.Ast
+      CubiML.Codegen
       CubiML.Parser
       CubiML.Typechecker
       CubiML.Typechecker.Core

@@ -7,11 +7,9 @@
 
 module CubiML.Typechecker.Core where
   
-import Control.Monad.Except as Except
 import Import
 import Lens.Micro.Platform
 import qualified RIO.HashMap as HashMap
-import RIO.State
 
 import CubiML.Typechecker.Reachability
 

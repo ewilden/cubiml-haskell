@@ -1,6 +1,6 @@
 name:                cubiml
 version:             0.1.0.0
-github:              ewilden/cubiml
+github:              ewilden/cubiml-haskell
 license:             BSD3
 author:              Evan Wildenhain
 maintainer:          evan.wildenhain@gmail.com
@@ -17,13 +17,13 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on Github at <https://github.com/ewilden/cubiml#readme>
+description:         Please see the README on Github at <https://github.com/ewilden/cubiml-haskell#readme>
 
 dependencies:
 - base >= 4.11 && < 10
-- mtl
 - megaparsec
 - microlens-platform
+- mtl
 - parser-combinators
 - raw-strings-qq
 - rio >= 0.1.12.0
